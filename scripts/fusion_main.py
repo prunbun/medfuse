@@ -2,6 +2,18 @@ import numpy as np
 import argparse
 import os
 import re
+import sys
+
+# Get the absolute path of the directory containing this script (scripts/)
+script_dir = os.path.dirname(os.path.abspath(__file__))
+# Get the absolute path of the parent directory (medfuse/) which is the project root
+project_root = os.path.dirname(script_dir)
+
+# Add the project root to the Python path if it's not already there
+if project_root not in sys.path:
+    sys.path.insert(0, project_root)
+    print(f"[fusion_main.py] Added project root to sys.path: {project_root}")
+
 from trainers.fusion_trainer import FusionTrainer
 # from trainers.mmtm_trainer import MMTMTrainer
 # from trainers.daft_trainer import DAFTTrainer
