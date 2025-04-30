@@ -11,7 +11,7 @@ import os # Keep original imports
 drive_mount_path = '/content/drive/MyDrive/'
 ehr_data_dir = f'{drive_mount_path}medfuse_data_root/phenotyping'
 # Assuming 'mimic-cxr-jpg' folder is under 'datasets2'
-cxr_data_dir = f'{drive_mount_path}datasets2/mimic-cxr-jpg'
+cxr_data_dir = f'{drive_mount_path}datasets2'
 # --- End Path Modifications ---
 
 
