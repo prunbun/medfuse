@@ -74,7 +74,7 @@ drive_mount_path = '/content/drive/MyDrive/' # Base mount point
 
 # Your specified paths relative to MyDrive
 ehr_folder_rel = 'medfuse_data_root/phenotyping'
-cxr_folder_rel = 'datasets2/mimic-cxr-jpg' # Contains the original split file
+cxr_folder_rel = 'datasets2' # Contains the original split file
 
 # Construct absolute paths within Colab's mounted Drive
 ehr_data_dir = os.path.join(drive_mount_path, ehr_folder_rel)
