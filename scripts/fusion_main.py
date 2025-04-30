@@ -70,7 +70,7 @@ normalizer = Normalizer(fields=cont_channels)  # choose here which columns to st
 #     normalizer_state = os.path.join(os.path.dirname(__file__), normalizer_state)
 normalizer_state = args.normalizer_state
 if normalizer_state is None:
-    normalizer_rel_path = os.path.join(os.pardir, 'normalizers', f'ph_ts{args.timestep}.input_str_previous.start_time:zero.normalizer')
+    normalizer_rel_path = os.path.join(os.pardir, 'normalizers', f'ph_ts{args.timestep}.input_str_previous.start_time_zero.normalizer')
     normalizer_state = os.path.normpath(os.path.join(os.path.dirname(__file__), normalizer_rel_path))
 normalizer.load_params(normalizer_state)
 
