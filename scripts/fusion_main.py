@@ -2,7 +2,7 @@ import numpy as np
 import argparse
 import os
 import re
-from trainers.fusion_trainer import FusionTrainer
+from ..trainers.fusion_trainer import FusionTrainer
 # from trainers.mmtm_trainer import MMTMTrainer
 # from trainers.daft_trainer import DAFTTrainer
 
