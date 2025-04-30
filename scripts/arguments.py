@@ -64,7 +64,7 @@ def args_parser():
     drive_mount_path = '/content/drive/MyDrive/'
 
     parser.add_argument('--ehr_data_dir', type=str, help='Path to the data of phenotyping fusion_type',
-                        default=os.path.join(drive_mount_path, 'medfuse_data_root/phenotyping')) # <<< UPDATED
+                        default=os.path.join(drive_mount_path, 'medfuse_data_root')) # <<< UPDATED
     parser.add_argument('--cxr_data_dir', type=str, help='Path to the data of phenotyping fusion_type',
                         default=os.path.join(drive_mount_path, 'datasets2/mimic-cxr-jpg')) # <<< UPDATED
     # parser.add_argument('--ehr_data_dir', type=str, help='Path to the data of phenotyping fusion_type',
