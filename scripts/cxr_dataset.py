@@ -27,7 +27,7 @@ class MIMICCXR(Dataset):
         labels[self.CLASSES] = labels[self.CLASSES].fillna(0)
         labels = labels.replace(-1.0, 0.0)
         
-        splits = pd.read_csv(f'{self.data_dir}/mimic-cxr-ehr-split.csv')
+        splits = pd.read_csv(f'{self.data_dir}/cxr_phenotype_split.csv')
 
 
         metadata_with_labels = metadata.merge(labels[self.CLASSES+['study_id'] ], how='inner', on='study_id')
