@@ -18,10 +18,10 @@ from trainers.fusion_trainer import FusionTrainer
 # from trainers.mmtm_trainer import MMTMTrainer
 # from trainers.daft_trainer import DAFTTrainer
 
-from .ehr_preprocessing import Discretizer, Normalizer
-from .ehr_dataset import get_datasets
-from .cxr_dataset import get_cxr_datasets
-from .fusion_dataset import load_cxr_ehr
+from scripts.ehr_preprocessing import Discretizer, Normalizer
+from scripts.ehr_dataset import get_datasets
+from scripts.cxr_dataset import get_cxr_datasets
+from scripts.fusion_dataset import load_cxr_ehr
 from pathlib import Path
 import torch
 
