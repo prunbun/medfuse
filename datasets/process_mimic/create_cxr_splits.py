@@ -17,7 +17,7 @@ cxr_data_dir = f'{drive_mount_path}datasets2/mimic-cxr-jpg'
 
 # Read original CXR split file - Added .gz extension
 # Assumes pandas handles .gz automatically via filename
-cxr_splits = pd.read_csv(f'{cxr_data_dir}/mimic-cxr-2.0.0-split.csv.gz')
+cxr_splits = pd.read_csv(f'{cxr_data_dir}/mimic-cxr-2.0.0-split.csv')
 print(f'before update {cxr_splits.split.value_counts()}')
 
 # Read EHR validation and test list files using the updated ehr_data_dir
