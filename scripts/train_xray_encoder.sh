@@ -1,4 +1,4 @@
-CUDA_VISIBLE_DEVICES=0 CUDA_LAUNCH_BLOCKING=1 python fusion_main.py --dim 256 \
+CUDA_VISIBLE_DEVICES=0 CUDA_LAUNCH_BLOCKING=1 python scripts/fusion_main.py --dim 256 \
 --dropout 0.3 --mode train \
 --epochs 100 --pretrained \
 --vision-backbone resnet34 --data_pairs radiology \
