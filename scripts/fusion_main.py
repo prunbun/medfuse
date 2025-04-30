@@ -64,10 +64,14 @@ discretizer_header = discretizer.transform(read_timeseries(args))[1].split(',')
 cont_channels = [i for (i, x) in enumerate(discretizer_header) if x.find("->") == -1]
 
 normalizer = Normalizer(fields=cont_channels)  # choose here which columns to standardize
+# normalizer_state = args.normalizer_state
+# if normalizer_state is None:
+#     normalizer_state = '../normalizers/ph_ts{}.input_str:previous.start_time:zero.normalizer'.format(args.timestep)
+#     normalizer_state = os.path.join(os.path.dirname(__file__), normalizer_state)
 normalizer_state = args.normalizer_state
 if normalizer_state is None:
-    normalizer_state = '../normalizers/ph_ts{}.input_str:previous.start_time:zero.normalizer'.format(args.timestep)
-    normalizer_state = os.path.join(os.path.dirname(__file__), normalizer_state)
+    normalizer_rel_path = os.path.join(os.pardir, 'normalizers', f'ph_ts{args.timestep}.input_str:previous.start_time:zero.normalizer')
+    normalizer_state = os.path.normpath(os.path.join(os.path.dirname(__file__), normalizer_rel_path))
 normalizer.load_params(normalizer_state)
 
 ehr_train_ds, ehr_val_ds, ehr_test_ds = get_datasets(discretizer, normalizer, args)
