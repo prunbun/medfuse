@@ -130,7 +130,7 @@ class MIMICCXR(Dataset):
         # (rest of checks as before)
 
         # 2. Load Labels (e.g., CheXpert) - use self.meta_data_dir
-        # Use getattr to safely get label filename from args or use default WITH 
+        # Use getattr to safely get label filename from args 
         label_filename = getattr(args, 'cxr_label_file', 'mimic-cxr-2.0.0-chexpert.csv') 
         label_file_path = os.path.join(self.meta_data_dir, label_filename) # Path is now correct
         print(f"[{split} split] Loading labels from: {label_file_path}")
@@ -144,7 +144,7 @@ class MIMICCXR(Dataset):
             raise e
 
         # 3. Load Metadata - use self.meta_data_dir
-        metadata_filename = 'mimic-cxr-2.0.0-metadata.csv' 
+        metadata_filename = 'mimic-cxr-2.0.0-metadata.csv'
         metadata_file_path = os.path.join(self.meta_data_dir, metadata_filename) # Path is now correct
         print(f"[{split} split] Loading metadata from: {metadata_file_path}")
         try:
@@ -209,6 +209,33 @@ class MIMICCXR(Dataset):
 
     def __len__(self):
         return len(self.filenames_loaded)
+
+
+# --- Helper to define transforms ---
+def get_transforms(args):
+    """Gets PyTorch transforms for training and validation/test."""
+    # Define normalization based on ImageNet stats
+    normalize = transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
+
+    # Define training transforms (example, adjust as needed)
+    train_transform_list = [
+        transforms.Resize(args.resize), # Resize shortest edge to 256? Or Resize(256) for square? Check effect.
+        transforms.RandomHorizontalFlip(),
+        transforms.RandomAffine(degrees=10, translate=(0.05, 0.05), scale=(0.95, 1.05)),
+        transforms.CenterCrop(args.crop), # Crop to 224x224
+        transforms.ToTensor(),
+        normalize,
+    ]
+
+    # Define validation/test transforms
+    test_transform_list = [
+        transforms.Resize(args.resize), # Typically resize slightly larger than crop
+        transforms.CenterCrop(args.crop), # Center crop to final size
+        transforms.ToTensor(),
+        normalize,
+    ]
+
+    return transforms.Compose(train_transform_list), transforms.Compose(test_transform_list)
 
 
 # --- Main function to create datasets ---
