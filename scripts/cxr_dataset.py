@@ -139,7 +139,7 @@ class MIMICCXR(Dataset):
 
         # 2. Load Labels (e.g., CheXpert)
         # Construct path using cxr_data_dir and the filename from args
-        label_filename = getattr(args, 'cxr_label_file', 'mimic-cxr-2.0.0-chexpert.csv.gz') # Use arg or default
+        label_filename = getattr(args, 'cxr_label_file', 'mimic-cxr-2.0.0-chexpert.csv') # Use arg or default
         label_file_path = os.path.join(self.meta_data_dir, label_filename)
         print(f"[{split} split] Loading labels from: {label_file_path}")
         try:
@@ -154,7 +154,7 @@ class MIMICCXR(Dataset):
             raise e
 
         # 3. Load Metadata (to link dicom_id to study_id)
-        metadata_filename = 'mimic-cxr-2.0.0-metadata.csv.gz' # Assuming fixed name
+        metadata_filename = 'mimic-cxr-2.0.0-metadata.csv' # Assuming fixed name
         metadata_file_path = os.path.join(self.meta_data_dir, metadata_filename)
         print(f"[{split} split] Loading metadata from: {metadata_file_path}")
         try:
