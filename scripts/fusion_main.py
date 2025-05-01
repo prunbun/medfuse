@@ -179,7 +179,7 @@ ehr_train_ds, ehr_val_ds, ehr_test_ds = None, None, None
 needs_ehr = args.data_pairs != 'radiology' and args.fusion_type != 'uni_cxr'
 # Add other conditions if needed, e.g. and args.fusion_type != 'some_other_cxr_only_mode'
 
-if needs_ehr:
+if True:
     print("\n[fusion_main.py] Setting up EHR discretizer/normalizer...")
     try:
         discretizer = Discretizer(timestep=float(args.timestep),
