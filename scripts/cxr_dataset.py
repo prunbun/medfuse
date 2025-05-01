@@ -157,10 +157,17 @@ class MIMICCXR(Dataset):
         # 4. Merge metadata and labels (logic remains the same)
         print(f"[{split} split] Merging metadata and labels...")
         metadata_with_labels = metadata.merge(labels, how='inner', on=['study_id', 'subject_id'])
-        self.filesnames_to_labels = {str(dicom_id): labels_row.values for dicom_id, labels_row in \
-                                     zip(metadata_with_labels['dicom_id'].astype(str), metadata_with_labels[self.CLASSES])}
-        labeled_dicom_ids = set(self.filesnames_to_labels.keys())
-        print(f"[{split} split] Found labels for {len(labeled_dicom_ids)} dicom_ids.")
+
+        # --- CORRECTED Dictionary Creation ---
+        print(f"[{split} split] Creating dicom_id -> labels map...")
+        # Get dicom_ids as a NumPy array of strings
+        dicom_ids_str = metadata_with_labels['dicom_id'].astype(str).values
+        # Get label data as a NumPy array (rows x num_classes)
+        label_data_array = metadata_with_labels[self.CLASSES].values
+        # Create dictionary by zipping them
+        self.filesnames_to_labels = {dicom_id: label_values
+                                        for dicom_id, label_values
+                                        in zip(dicom_ids_str, label_data_array)}
 
         # 5. Load the specific SPLIT definition file - use self.meta_data_dir
         split_filename = args.cxr_split_name # e.g., 'cxr_filtered_relabelled_by_ehr_split.csv'
