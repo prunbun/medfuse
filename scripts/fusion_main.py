@@ -147,12 +147,10 @@ def read_timeseries(args):
     try:
         with open(path, "r") as tsfile:
             header = tsfile.readline().strip().split(',')
-            assert header[0] == "Hours" # Keep assertion for now
+            assert header[0] == "Hours"
             for line in tsfile:
                 mas = line.strip().split(',')
-                # Convert to float, handle empty strings
-                processed_mas = [float(x) if x else np.nan for x in mas]
-                ret.append(np.array(processed_mas))
+                ret.append(np.array(mas))
         if not ret:
              raise ValueError(f"No data read from timeseries file: {path}")
         return np.stack(ret)
