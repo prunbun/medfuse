@@ -196,28 +196,50 @@ class MIMICCXR(Dataset):
 
     # __getitem__ and __len__ remain the same as the previous corrected version
     def __getitem__(self, index):
-        filename_stem = self.filenames_loaded[index]
+        """
+        Gets the image and labels for a given integer index from the DataLoader.
+        """
+        # 1. Get the actual dicom_id (filename stem) using the integer index
+        #    This key is guaranteed to exist in our dictionaries due to __init__ filtering.
         try:
-            image_path = self.filenames_to_path[filename_stem]
-            labels_array = self.filesnames_to_labels[filename_stem]
+             dicom_id_key = self.filenames_loaded[index]
+        except IndexError:
+             print(f"ERROR in __getitem__: Index {index} out of bounds for filenames_loaded (length {len(self.filenames_loaded)})")
+             # Handle this error, maybe return None or raise? Raising is safer.
+             raise IndexError(f"Index {index} out of bounds.")
+
+
+        # 2. Look up path and labels using the dicom_id key
+        try:
+            image_path = self.filenames_to_path[dicom_id_key]
+            labels_array = self.filesnames_to_labels[dicom_id_key]
             labels = torch.tensor(labels_array).float()
-        except KeyError as e:
-            print(f"ERROR in __getitem__: KeyError looking up data for dicom_id '{filename_stem}'.")
-            raise e
+        except KeyError:
+            # This indicates an inconsistency if filtering in __init__ was correct
+            print(f"ERROR in __getitem__: Internal inconsistency. KeyError looking up data for filtered dicom_id '{dicom_id_key}'.")
+            raise KeyError(f"Key {dicom_id_key} not found in path/label dict after filtering.")
         except Exception as e:
-             print(f"ERROR in __getitem__ processing dicom_id '{filename_stem}': {e}")
-             raise e
+             print(f"ERROR in __getitem__ looking up data for dicom_id '{dicom_id_key}': {e}")
+             raise e # Re-raise other unexpected errors
+
+        # 3. Open and convert image
         try:
-            img = Image.open(image_path).convert('RGB')
+            # Use a 'with' statement for safer file handling
+            with Image.open(image_path) as img_raw:
+                 img = img_raw.convert('RGB')
+        except FileNotFoundError:
+             print(f"ERROR in __getitem__: Image file not found at path: {image_path} (for key '{dicom_id_key}')")
+             raise # Re-raise error
         except Exception as e:
-             print(f"ERROR in __getitem__: Failed to open or convert image {image_path}: {e}")
-             raise e
+             print(f"ERROR in __getitem__: Failed to open or convert image {image_path} for key '{dicom_id_key}': {e}")
+             raise e # Re-raise other unexpected errors
+
+        # 4. Apply transform
         if self.transform is not None:
             img = self.transform(img)
-        return {'img': img, 'lab': labels}
 
-    def __len__(self):
-        return len(self.filenames_loaded)
+        # 5. Return data (using dictionary format assumed by SimpleCXRTrainer example)
+        return {'img': img, 'lab': labels}
 
 
 # --- Helper to define transforms ---
