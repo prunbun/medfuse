@@ -10,6 +10,7 @@ import glob
 import torchvision.transforms as transforms
 from torch.utils.data import DataLoader
 import os
+import argparse
 
 
 # class MIMICCXR(Dataset):
@@ -277,37 +278,59 @@ def get_cxr_datasets(args):
     """Creates the train, validation, and test MIMICCXR datasets."""
     train_transforms, test_transforms = get_transforms(args)
 
-    # Use the specific resized image directory passed via args
-    image_dir = args.cxr_image_dir
-    if not os.path.isdir(image_dir):
-         print(f"ERROR in get_cxr_datasets: Image directory not found or not a directory: {image_dir}")
-         # Or raise error? Returning None might cause issues later.
-         raise FileNotFoundError(f"Image directory not found: {image_dir}")
+    # data_dir is the base path up to 'datasets2' as passed in args.cxr_data_dir
+    data_dir = args.cxr_data_dir
+    # Define the sub-path from data_dir to the actual images
+    image_subpath = 'mimic-cxr-jpg/resized_p10' # Relative path from data_dir
 
-    print(f"get_cxr_datasets: Searching for available images in: {image_dir}")
-    # Glob pattern to find images - assumes flat structure in resized dir, adjust if nested
-    # Using /*.jpg means only files directly in image_dir, use /**/*.jpg for recursive
-    image_pattern = os.path.join(image_dir, '*.jpg') # Flat structure assumed
+    # Construct the full path to the resized image directory
+    full_image_dir_path = os.path.join(data_dir, image_subpath)
+
+    # Construct the glob pattern to find images within that directory
+    # Using '*.jpg' assumes a flat structure within resized_p10
+    image_pattern = os.path.join(full_image_dir_path, '*.jpg')
+
+    print(f"get_cxr_datasets: Base data_dir (from args): {data_dir}")
+    print(f"get_cxr_datasets: Constructed image pattern: {image_pattern}")
+
+    # Perform the glob operation using the corrected pattern
     available_image_paths = glob.glob(image_pattern)
-    # If images are nested like input:
-    # image_pattern = os.path.join(image_dir, '**/*.jpg')
-    # available_image_paths = glob.glob(image_pattern, recursive=True)
+    # If images might be nested inside resized_p10 (unlikely based on resize script):
+    # image_pattern_recursive = os.path.join(full_image_dir_path, '**/*.jpg')
+    # available_image_paths = glob.glob(image_pattern_recursive, recursive=True)
 
-    print(f"get_cxr_datasets: Found {len(available_image_paths)} image paths via glob using pattern {image_pattern}.")
+
+    print(f"get_cxr_datasets: Found {len(available_image_paths)} image paths via glob.")
     if not available_image_paths:
-        print(f"WARNING in get_cxr_datasets: No images found in {image_dir}. Check path and pattern.")
+        print(f"WARNING in get_cxr_datasets: No images found using pattern {image_pattern}. Check directory exists and contains JPGs.")
         # Depending on expected behavior, might want to raise an error here
 
 
     # Pass the list of available paths and args to the Dataset constructor
     # The MIMICCXR class will handle filtering based on the specified split internally
+    # NOTE: MIMICCXR also needs the correct base path for metadata/labels,
+    # ensure args.cxr_data_dir passed to it results in the correct path construction there too.
+    # If MIMICCXR uses args.cxr_data_dir directly to find metadata, it needs adjusting there as well,
+    # or pass separate args for metadata_dir and image_dir.
+    # Assuming MIMICCXR uses args.cxr_data_dir and constructs paths like os.path.join(args.cxr_data_dir, 'mimic-cxr-jpg', 'metadata_file')
+    # If MIMICCXR *needs* args.cxr_data_dir = '/content/drive/MyDrive/datasets2/mimic-cxr-jpg',
+    # then you should set it that way via the shell script/arguments.py and remove the hardcoding here.
+
+    # For now, assuming MIMICCXR needs the path containing the metadata/split files
+    # Adjust MIMICCXR's internal path logic if needed, or adjust args passed here.
+    mimic_cxr_jpg_base_path = os.path.join(data_dir, 'mimic-cxr-jpg')
+    temp_args_for_dataset = argparse.Namespace(**vars(args)) # Create a copy to modify path safely
+    temp_args_for_dataset.cxr_data_dir = mimic_cxr_jpg_base_path # Point to where metadata lives
+    temp_args_for_dataset.cxr_image_dir = full_image_dir_path # Add image dir explicitly if MIMICCXR uses it
+
+
     print("\nInitializing Train Dataset...")
-    dataset_train = MIMICCXR(available_image_paths, args, split='train', transform=train_transforms)
+    dataset_train = MIMICCXR(available_image_paths, temp_args_for_dataset, split='train', transform=train_transforms)
 
     print("\nInitializing Validation Dataset...")
-    dataset_validate = MIMICCXR(available_image_paths, args, split='validate', transform=test_transforms)
+    dataset_validate = MIMICCXR(available_image_paths, temp_args_for_dataset, split='validate', transform=test_transforms)
 
     print("\nInitializing Test Dataset...")
-    dataset_test = MIMICCXR(available_image_paths, args, split='test', transform=test_transforms)
+    dataset_test = MIMICCXR(available_image_paths, temp_args_for_dataset, split='test', transform=test_transforms)
 
     return dataset_train, dataset_validate, dataset_test
