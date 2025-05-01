@@ -93,7 +93,7 @@ def get_cxr_datasets(args):
     # if os.path.exists(filepath):
     #     paths = np.load(filepath)
     # else:
-    paths = glob.glob(f'{data_dir}/resized/**/*.jpg', recursive = True)
+    paths = glob.glob(f'{data_dir}/mimic-cxr-jpg/resized_p10/*.jpg', recursive = True)
     # np.save(filepath, paths)
     
     dataset_train = MIMICCXR(paths, args, split='train', transform=transforms.Compose(train_transforms))
