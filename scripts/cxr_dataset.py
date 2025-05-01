@@ -170,8 +170,8 @@ class MIMICCXR(Dataset):
                                         in zip(dicom_ids_str, label_data_array)}
 
         # 5. Load the specific SPLIT definition file - use self.meta_data_dir
-        split_filename = args.cxr_split_name # e.g., 'cxr_filtered_relabelled_by_ehr_split.csv'
-        split_file_path = os.path.join(self.meta_data_dir, split_filename) # Path is now correct
+        # split_filename = args.cxr_split_name # e.g., 'cxr_filtered_relabelled_by_ehr_split.csv'
+        split_file_path = os.path.join(args.cxr_data_dir, 'cxr_phenotype_split.csv') # Path is now correct
         print(f"[{split} split] Loading split definition from: {split_file_path}")
         try:
             splits_df = pd.read_csv(split_file_path)
