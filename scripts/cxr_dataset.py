@@ -130,12 +130,12 @@ class MIMICCXR(Dataset):
         # (rest of checks as before)
 
         # 2. Load Labels (e.g., CheXpert) - use self.meta_data_dir
-        # Use getattr to safely get label filename from args 
-        label_filename = getattr(args, 'cxr_label_file', 'mimic-cxr-2.0.0-chexpert.csv') 
+        # Use getattr to safely get label filename from args or use default (NO .gz per request)
+        label_filename = getattr(args, 'cxr_label_file', 'mimic-cxr-2.0.0-chexpert.csv') # NO .gz
         label_file_path = os.path.join(self.meta_data_dir, label_filename) # Path is now correct
         print(f"[{split} split] Loading labels from: {label_file_path}")
         try:
-            labels = pd.read_csv(label_file_path)
+            labels = pd.read_csv(label_file_path) # Will fail if file is actually gzipped
             labels[self.CLASSES] = labels[self.CLASSES].fillna(0)
             labels = labels.replace(-1.0, 0.0)
             labels = labels[['study_id', 'subject_id'] + self.CLASSES]
@@ -144,11 +144,11 @@ class MIMICCXR(Dataset):
             raise e
 
         # 3. Load Metadata - use self.meta_data_dir
-        metadata_filename = 'mimic-cxr-2.0.0-metadata.csv'
+        metadata_filename = 'mimic-cxr-2.0.0-metadata.csv' # NO .gz
         metadata_file_path = os.path.join(self.meta_data_dir, metadata_filename) # Path is now correct
         print(f"[{split} split] Loading metadata from: {metadata_file_path}")
         try:
-             metadata = pd.read_csv(metadata_file_path)
+             metadata = pd.read_csv(metadata_file_path) # Will fail if file is actually gzipped
              metadata = metadata[['dicom_id', 'study_id', 'subject_id']]
         except Exception as e:
              print(f"ERROR [{split} split]: Failed to load metadata file {metadata_file_path}: {e}")
@@ -158,20 +158,21 @@ class MIMICCXR(Dataset):
         print(f"[{split} split] Merging metadata and labels...")
         metadata_with_labels = metadata.merge(labels, how='inner', on=['study_id', 'subject_id'])
 
-        # --- CORRECTED Dictionary Creation ---
         print(f"[{split} split] Creating dicom_id -> labels map...")
-        # Get dicom_ids as a NumPy array of strings
         dicom_ids_str = metadata_with_labels['dicom_id'].astype(str).values
-        # Get label data as a NumPy array (rows x num_classes)
         label_data_array = metadata_with_labels[self.CLASSES].values
-        # Create dictionary by zipping them
         self.filesnames_to_labels = {dicom_id: label_values
                                         for dicom_id, label_values
                                         in zip(dicom_ids_str, label_data_array)}
 
+        labeled_dicom_ids = set(self.filesnames_to_labels.keys())
+        print(f"[{split} split] Found labels for {len(labeled_dicom_ids)} dicom_ids.")
+
+
         # 5. Load the specific SPLIT definition file - use self.meta_data_dir
-        # split_filename = args.cxr_split_name # e.g., 'cxr_filtered_relabelled_by_ehr_split.csv'
-        split_file_path = os.path.join(args.cxr_data_dir, 'cxr_phenotype_split.csv') # Path is now correct
+        # Use args.cxr_split_name directly now that it's defined in arguments.py
+        split_filename = 'cxr_phenotype_split.csv' # e.g., 'cxr_phenotype_split.csv'
+        split_file_path = os.path.join(self.meta_data_dir, split_filename) # Path uses correct base dir
         print(f"[{split} split] Loading split definition from: {split_file_path}")
         try:
             splits_df = pd.read_csv(split_file_path)
@@ -182,13 +183,14 @@ class MIMICCXR(Dataset):
             print(f"ERROR [{split} split]: Failed to load or process split file {split_file_path}: {e}")
             raise e
 
-        # 6. Final Filter (logic remains the same)
+        # 6. Final Filter (Uses labeled_dicom_ids which is now defined)
         print(f"[{split} split] Filtering based on intersection of: split file IDs, available image IDs, labeled IDs...")
         final_dicom_ids = list(dicom_ids_in_split_file.intersection(available_dicom_ids).intersection(labeled_dicom_ids))
         self.filenames_loaded = final_dicom_ids
 
         print(f"[{split} split] Final number of usable samples for this split: {len(self.filenames_loaded)}")
-        # (rest of checks as before)
+        if not self.filenames_loaded:
+            print(f"WARNING [{split} split]: No usable samples found for this split after filtering.")
 
         self.transform = transform
 
