@@ -120,7 +120,7 @@ class FusionTrainer(Trainer):
         steps = len(self.train_dl)
         print(f"--- [Train Epoch {self.epoch}] Total steps: {steps} ---")
         for i, (x, img, y_ehr, y_cxr, seq_lengths, pairs) in enumerate (self.train_dl):
-            # print(f"--- [Train Epoch {self.epoch}, Step {i}/{steps}] Data loaded ---") # Can be very verbose
+            print(f"--- [Train Epoch {self.epoch}, Step {i}/{steps}] Data loaded ---") # Can be very verbose
             y = self.get_gt(y_ehr, y_cxr) # Assuming this method exists in base Trainer
             x = torch.from_numpy(x).float()
             x = x.to(self.device)
@@ -130,12 +130,12 @@ class FusionTrainer(Trainer):
 
             # print(f"--- [Train Epoch {self.epoch}, Step {i}/{steps}] Calling model forward ---")
             output = self.model(x, seq_lengths, img, pairs)
-            # print(f"--- [Train Epoch {self.epoch}, Step {i}/{steps}] Model forward complete ---")
+            print(f"--- [Train Epoch {self.epoch}, Step {i}/{steps}] Model forward complete ---")
 
             pred = output[self.args.fusion_type].squeeze()
             # print(f"--- [Train Epoch {self.epoch}, Step {i}/{steps}] Calculating loss ---")
             loss = self.loss(pred, y)
-            # print(f"--- [Train Epoch {self.epoch}, Step {i}/{steps}] Loss calculated: {loss.item():.4f} ---")
+            print(f"--- [Train Epoch {self.epoch}, Step {i}/{steps}] Loss calculated: {loss.item():.4f} ---")
             epoch_loss += loss.item()
             if self.args.align > 0.0:
                 # print(f"--- [Train Epoch {self.epoch}, Step {i}/{steps}] Adding alignment loss ---")
@@ -146,17 +146,17 @@ class FusionTrainer(Trainer):
 
             # print(f"--- [Train Epoch {self.epoch}, Step {i}/{steps}] Zeroing gradients ---")
             self.optimizer.zero_grad()
-            # print(f"--- [Train Epoch {self.epoch}, Step {i}/{steps}] Performing backward pass ---")
+            print(f"--- [Train Epoch {self.epoch}, Step {i}/{steps}] Performing backward pass ---")
             loss.backward()
-            # print(f"--- [Train Epoch {self.epoch}, Step {i}/{steps}] Optimizer step ---")
+            print(f"--- [Train Epoch {self.epoch}, Step {i}/{steps}] Optimizer step ---")
             self.optimizer.step()
-            # print(f"--- [Train Epoch {self.epoch}, Step {i}/{steps}] Step complete ---")
+            print(f"--- [Train Epoch {self.epoch}, Step {i}/{steps}] Step complete ---")
 
 
             # print(f"--- [Train Epoch {self.epoch}, Step {i}/{steps}] Concatenating results ---")
             outPRED = torch.cat((outPRED, pred.detach()), 0) # Detach to avoid holding onto graph
             outGT = torch.cat((outGT, y.detach()), 0)
-            # print(f"--- [Train Epoch {self.epoch}, Step {i}/{steps}] Results concatenated ---")
+            print(f"--- [Train Epoch {self.epoch}, Step {i}/{steps}] Results concatenated ---")
 
 
             if i % 100 == 99: # Print every 100 steps (adjust frequency as needed)
