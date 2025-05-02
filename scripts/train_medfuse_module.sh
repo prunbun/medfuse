@@ -7,5 +7,5 @@ CUDA_VISIBLE_DEVICES=0 CUDA_LAUNCH_BLOCKING=1 python scripts/fusion_main.py \
 --data_pairs partial_ehr_cxr \
 --fusion_type lstm \
 --save_dir /content/drive/MyDrive/medfuse_checkpoints/fusion_partial/baseline \
---load_state_cxr /content/drive/MyDrive/medfuse_checkpoints/encoders/cxr_cnn/best_checkpoint.pth.tar \
---load_state_ehr /content/drive/MyDrive/medfuse_checkpoints/encoders/ehr_lstm/best_checkpoint.pth.tar
+# --load_state_cxr /content/drive/MyDrive/medfuse_checkpoints/encoders/cxr_cnn/best_checkpoint.pth.tar \
+# --load_state_ehr /content/drive/MyDrive/medfuse_checkpoints/encoders/ehr_lstm/best_checkpoint.pth.tar
