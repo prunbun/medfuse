@@ -10,38 +10,86 @@ import torchvision.transforms as transforms
 from torch.utils.data import DataLoader
 
 class EHRdataset(Dataset):
+    # def __init__(self, discretizer, normalizer, listfile, dataset_dir, return_names=True, period_length=48.0):
+    #     self.return_names = return_names
+    #     self.discretizer = discretizer
+    #     self.normalizer = normalizer
+    #     self._period_length = period_length
+
+    #     self._dataset_dir = dataset_dir
+    #     listfile_path = listfile
+    #     with open(listfile_path, "r") as lfile:
+    #         self._data = lfile.readlines()
+    #     self._listfile_header = self._data[0]
+    #     self.CLASSES = self._listfile_header.strip().split(',')[3:]
+    #     self._data = self._data[1:]
+
+
+
+    #     self._data = [line.split(',') for line in self._data]
+    #     self.data_map = {
+    #         mas[0]: {
+    #             'labels': list(map(float, mas[3:])),
+    #             'stay_id': float(mas[2]),
+    #             'time': float(mas[1]),
+    #             }
+    #             for mas in self._data
+    #     }
+
+    #     # import pdb; pdb.set_trace()
+
+    #     # self._data = [(line_[0], float(line_[1]), line_[2], float(line_[3])  ) for line_ in self._data]
+
+
+
+    #     self.names = list(self.data_map.keys())
     def __init__(self, discretizer, normalizer, listfile, dataset_dir, return_names=True, period_length=48.0):
         self.return_names = return_names
         self.discretizer = discretizer
         self.normalizer = normalizer
         self._period_length = period_length
-
         self._dataset_dir = dataset_dir
+
         listfile_path = listfile
         with open(listfile_path, "r") as lfile:
-            self._data = lfile.readlines()
-        self._listfile_header = self._data[0]
+            all_lines = lfile.readlines()
+        
+        self._listfile_header = all_lines[0]
         self.CLASSES = self._listfile_header.strip().split(',')[3:]
-        self._data = self._data[1:]
+        original_data_lines = all_lines[1:]
 
+        # Filter data lines based on subject ID prefix '10'
+        filtered_data_parts = []
+        for line in original_data_lines:
+            parts = line.strip().split(',')
+            if not parts or len(parts) < 1:
+                continue # Skip empty/invalid lines
+            filename = parts[0]
+            try:
+                subject_id = filename.split('_')[0]
+                if subject_id.startswith('10'):
+                    filtered_data_parts.append(parts) # Keep the parts list
+            except IndexError:
+                continue # Skip if filename format is unexpected
 
+        # Build data_map from the FILTERED lines/parts
+        self.data_map = {}
+        for parts in filtered_data_parts:
+             # Basic check for enough columns before accessing parts[1], parts[2] etc.
+             if len(parts) >= 4: 
+                 try:
+                     filename = parts[0]
+                     self.data_map[filename] = {
+                         'labels': list(map(float, parts[3:])),
+                         'stay_id': float(parts[2]),
+                         'time': float(parts[1]),
+                     }
+                 except (ValueError, IndexError):
+                      # Skip lines that have issues during conversion after filtering
+                      continue 
+             # Else: Skip lines with too few columns found even after filtering
 
-        self._data = [line.split(',') for line in self._data]
-        self.data_map = {
-            mas[0]: {
-                'labels': list(map(float, mas[3:])),
-                'stay_id': float(mas[2]),
-                'time': float(mas[1]),
-                }
-                for mas in self._data
-        }
-
-        # import pdb; pdb.set_trace()
-
-        # self._data = [(line_[0], float(line_[1]), line_[2], float(line_[3])  ) for line_ in self._data]
-
-
-
+        # Names are derived from the keys of the filtered data_map
         self.names = list(self.data_map.keys())
     
     def _read_timeseries(self, ts_filename, time_bound=None):
