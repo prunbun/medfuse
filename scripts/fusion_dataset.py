@@ -39,26 +39,69 @@ CLASSES = [
 
 class MIMIC_CXR_EHR(Dataset):
     def __init__(self, args, metadata_with_labels, ehr_ds, cxr_ds, split='train'):
-        
+        print(f"--- [MIMIC_CXR_EHR Init - {split}] Starting ---")
+        self.args = args
+        self.split = split
+        self.ehr_ds = ehr_ds
+        self.cxr_ds = cxr_ds # This instance contains only your available p10 images
+
         self.CLASSES = CLASSES
         if 'radiology' in args.labels_set:
             self.CLASSES = R_CLASSES
+
+        # 1. Get the set of actually available CXR dicom_ids from your cxr_ds
+        # Assumes cxr_ds has the 'filenames_loaded' attribute like your MIMICCXR class
+        try:
+            available_cxr_ids = set(self.cxr_ds.filenames_loaded)
+            print(f"--- [MIMIC_CXR_EHR Init - {split}] Found {len(available_cxr_ids)} available CXR IDs in provided cxr_ds ---")
+            if not available_cxr_ids:
+                 print(f"--- [MIMIC_CXR_EHR Init - {split}] WARNING: No available CXR IDs found in cxr_ds. Paired modes will likely be empty. ---")
+
+        except AttributeError:
+             print(f"--- [MIMIC_CXR_EHR Init - {split}] ERROR: The provided cxr_ds object does not have a 'filenames_loaded' attribute. Cannot determine available CXRs. ---")
+             # Handle this error appropriately - perhaps raise it, or default to assuming no CXRs are available
+             available_cxr_ids = set() # Or raise Exception(...)
+
+
+        # 2. Filter the input metadata_with_labels based on available CXR IDs
+        print(f"--- [MIMIC_CXR_EHR Init - {split}] Original metadata_with_labels size: {len(metadata_with_labels)} ---")
+        # Ensure 'dicom_id' column is string type for consistent matching with filenames_loaded
+        metadata_with_labels['dicom_id'] = metadata_with_labels['dicom_id'].astype(str)
         
-        self.metadata_with_labels = metadata_with_labels
-        self.cxr_files_paired = self.metadata_with_labels.dicom_id.values
-        self.ehr_files_paired = (self.metadata_with_labels['stay'].values)
-        self.cxr_files_all = cxr_ds.filenames_loaded
-        self.ehr_files_all = ehr_ds.names
+        metadata_filtered = metadata_with_labels[
+            metadata_with_labels['dicom_id'].isin(available_cxr_ids)
+        ].copy() # Use .copy() to avoid SettingWithCopyWarning if you modify later
+        
+        print(f"--- [MIMIC_CXR_EHR Init - {split}] Filtered metadata size (pairs with available CXR): {len(metadata_filtered)} ---")
+        
+        # Store the filtered metadata if needed elsewhere, or just use it to create paired lists
+        self.metadata_with_labels_filtered = metadata_filtered 
+
+        # 3. Create paired lists FROM THE FILTERED metadata
+        self.cxr_files_paired = self.metadata_with_labels_filtered['dicom_id'].values
+        self.ehr_files_paired = self.metadata_with_labels_filtered['stay'].values
+        print(f"--- [MIMIC_CXR_EHR Init - {split}] Number of EHR-CXR pairs where CXR is available: {len(self.cxr_files_paired)} ---")
+
+
+        # 4. Define all EHR files and unpaired EHR files (based on the *filtered* pairs)
+        self.ehr_files_all = self.ehr_ds.names # All EHR files available in ehr_ds
+        # Unpaired = All EHR - EHRs that were successfully paired with an AVAILABLE CXR
         self.ehr_files_unpaired = list(set(self.ehr_files_all) - set(self.ehr_files_paired))
-        self.ehr_ds = ehr_ds
-        self.cxr_ds = cxr_ds
-        self.args = args
-        self.split = split
-        self.data_ratio = self.args.data_ratio 
+        print(f"--- [MIMIC_CXR_EHR Init - {split}] Total EHR files: {len(self.ehr_files_all)} ---")
+        print(f"--- [MIMIC_CXR_EHR Init - {split}] Unpaired EHR files (relative to available CXR pairs): {len(self.ehr_files_unpaired)} ---")
+
+        # 5. Set data_ratio based on split (logic remains the same)
+        self.data_ratio = self.args.data_ratio
         if split=='test':
             self.data_ratio =  1.0
+            print(f"--- [MIMIC_CXR_EHR Init - {split}] Data ratio set to 1.0 for test split ---")
         elif split == 'val':
             self.data_ratio =  0.0
+            print(f"--- [MIMIC_CXR_EHR Init - {split}] Data ratio set to 0.0 for val split ---")
+        else:
+             print(f"--- [MIMIC_CXR_EHR Init - {split}] Data ratio for train split: {self.data_ratio} ---")
+        
+        print(f"--- [MIMIC_CXR_EHR Init - {split}] Initialization Complete ---")
 
 
     def __getitem__(self, index):
