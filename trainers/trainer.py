@@ -55,7 +55,7 @@ class Trainer():
         if self.args.load_state is None:
             return
         # checkpoint = torch.load(self.args.load_state)
-        checkpoint = torch.load(load_path, map_location=self.device, weights_only=False)
+        checkpoint = torch.load(self.args.load_state, map_location=self.device, weights_only=False)
 
 
         own_state = self.model.state_dict()
