@@ -132,14 +132,14 @@ class Fusion(nn.Module):
                 feats = ehr_feats[None,None,:]
                 feats = torch.cat([feats, cxr_feats[:,None,:]], dim=1)
             else:
-                # feats = ehr_feats[:,None,:]
-                # feats = torch.cat([feats, cxr_feats[:,None,:]], dim=1)
-                # Add sequence dimension to both first
-                ehr_f = ehr_feats[:,None,:]
-                cxr_f = cxr_feats[:,None,:] # cxr_feats already projected/zeroed
+                feats = ehr_feats[:,None,:]
+                feats = torch.cat([feats, cxr_feats[:,None,:]], dim=1)
+                # # Add sequence dimension to both first
+                # ehr_f = ehr_feats[:,None,:]
+                # cxr_f = cxr_feats[:,None,:] # cxr_feats already projected/zeroed
 
-                # Concatenate CXR first, then EHR
-                feats = torch.cat([cxr_f, ehr_f], dim=1)
+                # # Concatenate CXR first, then EHR
+                # feats = torch.cat([cxr_f, ehr_f], dim=1)
         seq_lengths = np.array([1] * len(seq_lengths))
         seq_lengths[pairs] = 2
         
