@@ -9,4 +9,4 @@ CUDA_VISIBLE_DEVICES=0 CUDA_LAUNCH_BLOCKING=1 python scripts/fusion_main.py \
 --task in-hospital-mortality \
 --labels_set mortality \
 --fusion_type lstm \
---save_dir /content/drive/MyDrive/medfuse_checkpoints/fusion_partial/mortality_reversed
+--save_dir /content/drive/MyDrive/medfuse_checkpoints/fusion_partial/mortality
