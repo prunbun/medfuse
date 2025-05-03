@@ -141,7 +141,8 @@ def read_timeseries(args):
     # !!! This function still reads a specific file for EHR header generation !!!
     # Make sure this file exists if the EHR block below is executed
     # Or modify this function to return a dummy header if only that is needed
-    path = os.path.join(args.ehr_data_dir, args.task, 'train', '10000032_episode1_timeseries.csv') # Example file
+    # path = os.path.join(args.ehr_data_dir, args.task, 'train', '10000032_episode1_timeseries.csv') # Example file
+    path = os.path.join(args.ehr_data_dir, args.task, 'train', '1002430_episode1_timeseries.csv') # Example file
     print(f"[fusion_main.py] read_timeseries attempting to read (only if EHR block runs): {path}")
     ret = []
     try:
