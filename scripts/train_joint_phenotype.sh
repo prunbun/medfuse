@@ -1,4 +1,4 @@
-CUDA_VISIBLE_DEVICES=0 CUDA_LAUNCH_BLOCKING=1 python fusion_main.py \
+CUDA_VISIBLE_DEVICES=0 CUDA_LAUNCH_BLOCKING=1 python scripts/fusion_main.py \
 --dim 256 --dropout 0.3 --layers 2 \
 --vision-backbone resnet34 \
 --mode train \
