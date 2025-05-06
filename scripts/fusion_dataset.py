@@ -207,14 +207,6 @@ def load_cxr_ehr(args, ehr_train_ds, ehr_val_ds, cxr_train_ds, cxr_val_ds, ehr_t
     val_ds = MIMIC_CXR_EHR(args, val_meta_with_labels, ehr_val_ds, cxr_val_ds, split='val')
     test_ds = MIMIC_CXR_EHR(args, test_meta_with_labels, ehr_test_ds, cxr_test_ds, split='test')
 
-    # printPrevalence(train_meta_with_labels, args)
-    # printPrevalence(val_meta_with_labels, args)
-    # printPrevalence(test_meta_with_labels, args)
-
-    # printPrevalence(splits_labels_train, args)
-    # printPrevalence(splits_labels_val, args)
-    # printPrevalence(splits_labels_test, args)
-
 
     train_dl = DataLoader(train_ds, args.batch_size, shuffle=True, collate_fn=my_collate, pin_memory=True, num_workers=16, drop_last=True)
     val_dl = DataLoader(val_ds, args.batch_size, shuffle=False, collate_fn=my_collate, pin_memory=True, num_workers=16, drop_last=False)

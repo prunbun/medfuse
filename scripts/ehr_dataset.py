@@ -10,39 +10,7 @@ import torchvision.transforms as transforms
 from torch.utils.data import DataLoader
 
 class EHRdataset(Dataset):
-    # def __init__(self, discretizer, normalizer, listfile, dataset_dir, return_names=True, period_length=48.0):
-    #     self.return_names = return_names
-    #     self.discretizer = discretizer
-    #     self.normalizer = normalizer
-    #     self._period_length = period_length
 
-    #     self._dataset_dir = dataset_dir
-    #     listfile_path = listfile
-    #     with open(listfile_path, "r") as lfile:
-    #         self._data = lfile.readlines()
-    #     self._listfile_header = self._data[0]
-    #     self.CLASSES = self._listfile_header.strip().split(',')[3:]
-    #     self._data = self._data[1:]
-
-
-
-    #     self._data = [line.split(',') for line in self._data]
-    #     self.data_map = {
-    #         mas[0]: {
-    #             'labels': list(map(float, mas[3:])),
-    #             'stay_id': float(mas[2]),
-    #             'time': float(mas[1]),
-    #             }
-    #             for mas in self._data
-    #     }
-
-    #     # import pdb; pdb.set_trace()
-
-    #     # self._data = [(line_[0], float(line_[1]), line_[2], float(line_[3])  ) for line_ in self._data]
-
-
-
-    #     self.names = list(self.data_map.keys())
     def __init__(self, discretizer, normalizer, listfile, dataset_dir, return_names=True, period_length=48.0):
         self.return_names = return_names
         self.discretizer = discretizer
@@ -121,18 +89,6 @@ class EHRdataset(Dataset):
                 "name": index}
 
     def get_decomp_los(self, index, time_bound=None):
-        # name = self._data[index][0]
-        # time_bound = self._data[index][1]
-        # ys = self._data[index][3]
-
-        # (data, header) = self._read_timeseries(index, time_bound=time_bound)
-        # data = self.discretizer.transform(data, end=time_bound)[0] 
-        # if (self.normalizer is not None):
-        #     data = self.normalizer.transform(data)
-        # ys = np.array(ys, dtype=np.int32) if len(ys) > 1 else np.array(ys, dtype=np.int32)[0]
-        # return data, ys
-
-        # data, ys = 
         return self.__getitem__(index, time_bound)
 
 

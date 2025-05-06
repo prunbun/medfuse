@@ -21,7 +21,7 @@ class LSTM(nn.Module):
         self.feats_dim = hidden_dim
         self.dense_layer = nn.Linear(hidden_dim, num_classes)
         self.initialize_weights()
-        # self.activation = torch.sigmoid
+
     def initialize_weights(self):
         for model in self.modules():
 
