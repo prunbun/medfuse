@@ -1,7 +1,9 @@
 # Multimodal LSTM Paper Replication
 **Replication Team:** Pranav Thatte
+</br>
 Paper: MedFuse: Multi-modal fusion with clinical time-series data
 and chest X-ray images
+</br>
 Original Repository: https://github.com/nyuad-cai/MedFuse
 
 #### Paper Citation
