@@ -113,7 +113,7 @@ The core trainer is located at `medfuse/trainers/fusion_trainer.py` and is activ
 
 #### Running `fusion_main.py`
 In order to run `fusion_main.py`, the bash scripts used during replication are available in the `medfuse/scripts` folder. To run them, please change the paths to the appropriate locations for where your data lies in `medfuse/scripts/arguments.py` and the save directory for the resulting checkpoints in the scripts themselves. To run the bash scripts on Colab, you can use the following code as a template:
-```
+```python
 # ---- mount your drive ----
 from google.colab import drive
 try:
