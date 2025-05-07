@@ -149,3 +149,25 @@ sys.path.append(os.path.join(project_root, 'trainers'))
 # Run the script
 !sh ./scripts/train_medfuse_module.sh
 ```
+
+#### Scripts Naming Guide
+Here, I provide a quick guide on how to locate the right bash script
+- Training
+  - CXR Encoder: `train_cxr_encoder`
+  - MedFuse Baseline (Phenotyping): `train_medfuse_module`
+  - MedFuse Baseline (Mortality): `train_medfuse_mortality`
+  - LSTM EHR-only model: `train_ehr_lstm`
+  - Joint (No individual encoders): `train_joint_phenotype`
+  
+- Eval
+  - MedFuse Base Pre-trained Checkpoint: `eval_medfuse_phenotype_final`
+  - MedFuse Finetuned Pre-trained Checkpoint: `eval_medfuse_phenotype_optimal`
+  - MedFuse Baseline (Phenotyping): `eval_medfuse_module`
+  - MedFuse Baseline (Mortality): `eval_medfuse_mortality`
+  - LSTM EHR-only model: `eval_ehr_lstm`
+  - Joint (No individual encoders): `eval_joint_phenotype`
+
+
+#### Pretrained Checkpoints
+In order to run the original pretrained checkpoints, please see the appropriate script above and upload the appropriate checkpoint from the original paper repository to your Google Drive location. They mainly provide the phenotyping task checkpoints located at `MedFuse/checkpoints/phenotyping/XXX/best_checkpoint.pth.tar`
+
