@@ -22,6 +22,7 @@ Johnson, A., Lungren, M., Peng, Y., Lu, Z., Mark, R., Berkowitz, S., and Horng, 
 - [Introduction](./README.md#introduction)
 - [Dependencies](./README.md#dependencies)
 - [Data](./README.md#data)
+- [Training and Evaluation](./README.md#training-and-evaluation)
 
 ## Introduction
 This repository details the effort to reproduce the multimodal healthcare paper, MedFuse. MedFuse aims to predict phenotypes assigned to patients and in-hospital mortality within the first 48 hours of being admitted to an ICU. It does so through processing Electronic Health Records (EHR) timeseries data and thorax radiographs (CXR x-ray images) found in the `MIMIC-IV` and `MIMIC-CXR-JPG` datasets. The paper explores 3 main hypotheses:
@@ -97,3 +98,52 @@ This dataset is very large (~550 GB), as such, for the purposes of replication, 
 > The preprocessing scripts included in this repo for images already has filtering logic in the EHR data to subset the data to match the CXR subset.
 > The files are well organized on the Physionet.org site, as such, please look for the subset of folders that you would like, e.g. `p10`.
 > Google Cloud credits are available for students or for those with a free trial; the data transfer should cost less than $5.00.
+
+To preprocess the CXR images through Colab please see the code provided here: `medfuse/google_colab_scripts/preprocess_cxr.py`
+
+## Training and Evaluation
+
+#### Core Trainer
+The core trainer is located at `medfuse/trainers/fusion_trainer.py` and is activated by calling the driver script located at `medfuse/scripts/fusion_main.py`. This script further depends on support objects for preprocessing (e.g. Discretizer, Normalizer, Dataset objects) and model definitions `medfuse/models`.
+
+#### Running `fusion_main.py`
+In order to run `fusion_main.py`, the bash scripts used during replication are available in the `medfuse/scripts` folder. To run them, please change the paths to the appropriate locations for where your data lies in `medfuse/scripts/arguments.py` and the save directory for the resulting checkpoints in the scripts themselves. To run the bash scripts on Colab, you can use the following code as a template:
+```
+# ---- mount your drive ----
+from google.colab import drive
+try:
+    print("Attempting to unmount Drive...")
+    drive.flush_and_unmount()
+    print("Drive unmounted.")
+except Exception as e:
+    print(f"Error during unmount (might not have been mounted): {e}")
+
+print("Remounting Drive...")
+drive.mount('/content/drive', force_remount=True)
+print("Drive remounted.")
+
+# ---- clone your repository ----
+!git clone https://github.com/USERNAME/REPO_NAME.git
+import os
+%cd REPO_NAME/
+print(f"Current directory: {os.getcwd()}")
+# !git pull
+
+# ---- run your script ----
+# Pull latest changes
+!git pull
+
+import sys
+project_root = '/content/REPO_NAME'
+if project_root not in sys.path:
+    sys.path.append(project_root)
+
+# Add the 'trainers' subdirectory to the path
+sys.path.append(os.path.join(project_root, 'trainers'))
+
+# Change working directory
+%cd /content/REPO_NAME/
+
+# Run the script
+!sh ./scripts/train_medfuse_module.sh
+```
