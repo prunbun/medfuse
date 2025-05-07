@@ -38,24 +38,28 @@ In this section, information required for installing the necessary dependencies 
 1. To load all dependencies for the project, first create an environment using `conda create --name [ENV NAME]` and `conda actimate [ENV NAME]`
 2. `pip freeze` has generated `requirements.txt` that can be found in the repository
 3. Here is a short list of required packages below:
-   > - matplotlib 3.10.1
-   > - numpy 2.2.4
-   > - pandas 2.2.3
-   > - pillow 11.2.1
-   > - python 3.13.2
-   > - pyyaml 6.0.2
-   > - scikit-learn 1.6.1
-   > - scipy 1.15.2
-   > - torch 2.7.0
-   > - torchvision 0.22.0
-   > - tqdm 4.67.1
+   - matplotlib 3.10.1
+   - numpy 2.2.4
+   - pandas 2.2.3
+   - pillow 11.2.1
+   - python 3.13.2
+   - pyyaml 6.0.2
+   - scikit-learn 1.6.1
+   - scipy 1.15.2
+   - torch 2.7.0
+   - torchvision 0.22.0
+   - tqdm 4.67.1
 
 ## Data
 
 To acquire the data, please follow the links for each dataset found at the top of the README. From there, you will need to complete a health research course (1 hr) and sign a few forms before getting access to the datasets.
 </br>
 
-#### 
+#### MIMIC-IV
+This dataset is roughly 7GB. In order to download the full dataset, you can either directly download it from the website or use the following command:
+```
+wget -r -N -c -np --user [USERNAME] --ask-password https://physionet.org/files/mimiciv/1.0/
+```
 
 <!-- brew install wget
 wget -r -N -c -np --user [USERNAME] --ask-password https://physionet.org/files/mimiciv/1.0/
