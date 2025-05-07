@@ -2,11 +2,17 @@
 **Replication Team:** Pranav Thatte
 </br>
 
+**Replication Details and Results:** https://drive.google.com/file/d/1qQUzJ0OFjzehdIWqrRQynkH_Nx4Lp5Qv/view?usp=sharing
+</br>
+
 **Paper:** MedFuse: Multi-modal fusion with clinical time-series data
 and chest X-ray images
 </br>
 
 **Original Repository:** https://github.com/nyuad-cai/MedFuse
+</br>
+
+
 
 #### Paper Citation
 N. Hayat, K. J. Geras, and F. E. Shamout, 'MedFuse: Multi-modal fusion with clinical time-series data and chest X-ray images,' *Proceedings of Machine Learning Research*, vol. 182, pp. 1--25, 2022. Available: https://arxiv.org/abs/2207.07027
