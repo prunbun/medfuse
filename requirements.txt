@@ -1,13 +1,35 @@
 Bottleneck @ file:///private/var/folders/nz/j6p8yfhx1mv_0grj5xl4650h0000gp/T/abs_55txi4fy1u/croot/bottleneck_1731058642212/work
 colorama @ file:///Users/builder/cbouss/perseverance-python-buildout/croot/colorama_1728588725923/work
+contourpy==1.3.2
+cycler==0.12.1
+filelock==3.18.0
+fonttools==4.57.0
+fsspec==2025.3.2
+Jinja2==3.1.6
+joblib==1.4.2
+kiwisolver==1.4.8
+MarkupSafe==3.0.2
+matplotlib==3.10.1
+mpmath==1.3.0
+networkx==3.4.2
 numexpr @ file:///Users/builder/cbouss/perseverance-python-buildout/croot/numexpr_1731706619640/work
 numpy @ file:///private/var/folders/k1/30mswbxs7r1g6zwn8y4fyt500000gp/T/abs_c1bynexs0d/croot/numpy_and_numpy_base_1742570425060/work/dist/numpy-2.2.4-cp313-cp313-macosx_11_0_arm64.whl#sha256=1e181012139473df297ef2682717f58a85878caf05580c9c795f5605016a9d25
+packaging==25.0
 pandas @ file:///private/var/folders/nz/j6p8yfhx1mv_0grj5xl4650h0000gp/T/abs_4aifrweohv/croot/pandas_1732735109535/work/dist/pandas-2.2.3-cp313-cp313-macosx_11_0_arm64.whl#sha256=8f01410ead9f51bf614097bf4230440a4461983f8acb57141e819b93d81e26d6
+pillow==11.2.1
+pyparsing==3.2.3
 python-dateutil @ file:///Users/builder/cbouss/perseverance-python-buildout/croot/python-dateutil_1728585579455/work
 pytz @ file:///Users/builder/cbouss/perseverance-python-buildout/croot/pytz_1728586101417/work
 PyYAML @ file:///private/var/folders/nz/j6p8yfhx1mv_0grj5xl4650h0000gp/T/abs_e8m1aayrqt/croot/pyyaml_1731006115055/work
+scikit-learn==1.6.1
+scipy==1.15.2
 setuptools==72.1.0
 six @ file:///private/var/folders/k1/30mswbxs7r1g6zwn8y4fyt500000gp/T/abs_03myqm7p6o/croot/six_1744271511946/work
+sympy==1.14.0
+threadpoolctl==3.6.0
+torch==2.7.0
+torchvision==0.22.0
 tqdm @ file:///home/conda/feedstock_root/build_artifacts/tqdm_1735661334605/work
+typing_extensions==4.13.2
 tzdata @ file:///croot/python-tzdata_1690578112552/work
 wheel==0.45.1
