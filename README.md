@@ -74,14 +74,29 @@ python -m medfuse.datasets.process_mimic.extract_subjects_iv [path to gunzipped 
 2. Now, the data will exist in data/root, we can clean the data (missing information etc.) and break data into episode-level info (each ICU stay)
 ```
 python -m medfuse.datasets.process_mimic.validate_events data/root
+```
+```
 python -m medfuse.datasets.process_mimic.extract_episodes_from_subject data/root
 ```
 
-<!-- brew install wget
-wget -r -N -c -np --user [USERNAME] --ask-password https://physionet.org/files/mimiciv/1.0/
+3. Lastly, we do train/val/test splits on the data, then further split for each task with labels for each.
+```
+python -m medfuse.datasets.process_mimic.split_train_and_test data/root/
+```
+```
+python -m medfuse.datasets.process_mimic.create_in_hospital_mortality data/root/ data/in-hospital-mortality/
+```
+```
+python -m medfuse.datasets.process_mimic.create_phenotyping data/root/ data/phenotyping/
+```
 
-gunzip ...
+#### MIMIC-CXR-JPG
+This dataset is very large (~550 GB), as such, for the purposes of replication, only 10% of the data was used, the subject ID's starting with `p10XXXXXX`. To download such a dataset, please use the Google Cloud Bucket that is provided through the dataset website as directly downloading the data is too slow. In order to transfer the files, you will need to activate a Google Cloud billing project (see note below). These files will be copied to a Google Drive folder where they can be accessed via colab or downloaded in some faster manner afterwords. To do so on Colab, please run the following code
+```
 
-python -m medfuse.datasets.process_mimic.extract_subjects_iv [path to gunzipped csv files] data/root 
-python -m medfuse.datasets.process_mimic.validate_events data/root
-python -m medfuse.datasets.process_mimic.extract_episodes_from_subject data/root -->
+```
+
+> NOTE
+> The preprocessing scripts included in this repo for images already has filtering logic in the EHR data to subset the data to match the CXR subset.
+> The files are well organized on the Physionet.org site, as such, please look for the subset of folders that you would like, e.g. `p10`.
+> Google Cloud credits are available for students or for those with a free trial; the data transfer should cost less than $5.00.
