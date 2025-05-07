@@ -52,13 +52,29 @@ In this section, information required for installing the necessary dependencies 
 
 ## Data
 
-To acquire the data, please follow the links for each dataset found at the top of the README. From there, you will need to complete a health research course (1 hr) and sign a few forms before getting access to the datasets.
+To acquire the data, please follow the links for each dataset found at the top of the README. From there, you will need to complete a health research course (1 hr) and sign a few forms before getting access to the datasets. I would suggest to create an umbrella folder where the core code lies in one folder and the data is downloaded in another.
 </br>
 
 #### MIMIC-IV
-This dataset is roughly 7GB. In order to download the full dataset, you can either directly download it from the website or use the following command:
+This dataset is roughly 7GB. I would suggest to download it in a folder different from any Github repository for data privacy and size considerations. In order to download the full dataset, you can either directly download it from the website or use the following command:
 ```
 wget -r -N -c -np --user [USERNAME] --ask-password https://physionet.org/files/mimiciv/1.0/
+```
+
+Afterwords, the steps from the original paper can be followed for preprocessing as they are documented well: https://github.com/nyuad-cai/MedFuse/blob/main/mimic4extract/README.md
+
+</br>
+Here is a brief overview of the steps required:
+
+1. Extract data from `.csv` files for each subject and store them into `data/{SUBJECT_ID}`
+```
+python -m medfuse.datasets.process_mimic.extract_subjects_iv [path to gunzipped csv files] data/root 
+```
+
+2. Now, the data will exist in data/root, we can clean the data (missing information etc.) and break data into episode-level info (each ICU stay)
+```
+python -m medfuse.datasets.process_mimic.validate_events data/root
+python -m medfuse.datasets.process_mimic.extract_episodes_from_subject data/root
 ```
 
 <!-- brew install wget
