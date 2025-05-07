@@ -32,6 +32,8 @@ This repository details the effort to reproduce the multimodal healthcare paper,
 
 The paper’s core contribution involves treating multi-modal data as a series of sequential inputs to an LSTM-based module, in contrast with previous work that created a single combined representation of all available modalities. Additionally, they establish a benchmark for multimodal performance on the tasks of phenotype and in-hospital mortality prediction.
 
+![](figure_arch.png)
+
 ## Dependencies
 
 In this section, information required for installing the necessary dependencies is provided.
