@@ -1,8 +1,5 @@
 # Multimodal LSTM Paper Replication
-**Replication Team:** Pranav Thatte
-</br>
-
-**Replication Details and Results:** https://drive.google.com/file/d/1qQUzJ0OFjzehdIWqrRQynkH_Nx4Lp5Qv/view?usp=sharing
+**Replication Team:** Pranav Thatte, [Replication Steps, Model Details, and Results Report](https://drive.google.com/file/d/1qQUzJ0OFjzehdIWqrRQynkH_Nx4Lp5Qv/view?usp=sharing)
 </br>
 
 **Paper:** MedFuse: Multi-modal fusion with clinical time-series data
