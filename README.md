@@ -21,12 +21,13 @@ Johnson, A., Lungren, M., Peng, Y., Lu, Z., Mark, R., Berkowitz, S., and Horng, 
 ## Contents
 - [Introduction](./README.md#introduction)
 - [Dependencies](./README.md#dependencies)
+- [Data](./README.md#data)
 
 ## Introduction
 This repository details the effort to reproduce the multimodal healthcare paper, MedFuse. MedFuse aims to predict phenotypes assigned to patients and in-hospital mortality within the first 48 hours of being admitted to an ICU. It does so through processing Electronic Health Records (EHR) timeseries data and thorax radiographs (CXR x-ray images) found in the `MIMIC-IV` and `MIMIC-CXR-JPG` datasets. The paper explores 3 main hypotheses:
-1. Does multimodal data provide a strict advantage over unimodal data in healthcare applications for the tasks of phenotype and in-hospital mortality prediction?
-2. Given that labels assigned to multimodal data can differ by modality and they are not collected synchronously in healthcare applications, is it a better idea to train encoders for each modality separately and fuse them in later stages of the architecture?
-3. In healthcare treatment processes, medical staff often collect data sequentially, as needed, as the patient condition evolves. Does it make sense to model modalities as events in a sequence rather than occurring jointly in time?
+> 1. Does multimodal data provide a strict advantage over unimodal data in healthcare applications for the tasks of phenotype and in-hospital mortality prediction?
+> 2. Given that labels assigned to multimodal data can differ by modality and they are not collected synchronously in healthcare applications, is it a better idea to train encoders for each modality separately and fuse them in later stages of the architecture?
+> 3. In healthcare treatment processes, medical staff often collect data sequentially, as needed, as the patient condition evolves. Does it make sense to model modalities as events in a sequence rather than occurring jointly in time?
 
 The paper’s core contribution involves treating multi-modal data as a series of sequential inputs to an LSTM-based module, in contrast with previous work that created a single combined representation of all available modalities. Additionally, they establish a benchmark for multimodal performance on the tasks of phenotype and in-hospital mortality prediction.
 
@@ -37,19 +38,24 @@ In this section, information required for installing the necessary dependencies 
 1. To load all dependencies for the project, first create an environment using `conda create --name [ENV NAME]` and `conda actimate [ENV NAME]`
 2. `pip freeze` has generated `requirements.txt` that can be found in the repository
 3. Here is a short list of required packages below:
-   - matplotlib 3.10.1
-   - numpy 2.2.4
-   - pandas 2.2.3
-   - pillow 11.2.1
-   - python 3.13.2
-   - pyyaml 6.0.2
-   - scikit-learn 1.6.1
-   - scipy 1.15.2
-   - torch 2.7.0
-   - torchvision 0.22.0
-   - tqdm 4.67.1
+   > - matplotlib 3.10.1
+   > - numpy 2.2.4
+   > - pandas 2.2.3
+   > - pillow 11.2.1
+   > - python 3.13.2
+   > - pyyaml 6.0.2
+   > - scikit-learn 1.6.1
+   > - scipy 1.15.2
+   > - torch 2.7.0
+   > - torchvision 0.22.0
+   > - tqdm 4.67.1
 
-## Acquiring Data
+## Data
+
+To acquire the data, please follow the links for each dataset found at the top of the README. From there, you will need to complete a health research course (1 hr) and sign a few forms before getting access to the datasets.
+</br>
+
+#### 
 
 <!-- brew install wget
 wget -r -N -c -np --user [USERNAME] --ask-password https://physionet.org/files/mimiciv/1.0/
