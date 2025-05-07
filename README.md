@@ -91,10 +91,7 @@ python -m medfuse.datasets.process_mimic.create_phenotyping data/root/ data/phen
 ```
 
 #### MIMIC-CXR-JPG
-This dataset is very large (~550 GB), as such, for the purposes of replication, only 10% of the data was used, the subject ID's starting with `p10XXXXXX`. To download such a dataset, please use the Google Cloud Bucket that is provided through the dataset website as directly downloading the data is too slow. In order to transfer the files, you will need to activate a Google Cloud billing project (see note below). These files will be copied to a Google Drive folder where they can be accessed via colab or downloaded in some faster manner afterwords. To do so on Colab, please run the following code
-```
-
-```
+This dataset is very large (~550 GB), as such, for the purposes of replication, only 10% of the data was used, the subject ID's starting with `p10XXXXXX`. To download such a dataset, please use the Google Cloud Bucket that is provided through the dataset website as directly downloading the data is too slow. In order to transfer the files, you will need to activate a Google Cloud billing project (see note below). These files will be copied to a Google Drive folder where they can be accessed via colab or downloaded in some faster manner afterwords. To do so on Colab, a template for the code cells is provided at `medfuse/google_colab_scripts/transfer_bucket.py`, please replace the variables as needed with the correct paths and billing account.
 
 > NOTE
 > The preprocessing scripts included in this repo for images already has filtering logic in the EHR data to subset the data to match the CXR subset.
